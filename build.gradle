@@ -1,0 +1,61 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.7.7'
+    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+}
+
+group = 'com.papaco'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    set('springCloudVersion', "2021.0.5")
+}
+
+dependencies {
+    // spring
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // spring cloud
+//    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+
+    // aws
+//    implementation 'io.awspring.cloud:spring-cloud-aws-context'
+//    implementation 'io.awspring.cloud:spring-cloud-starter-aws-messaging'
+
+    // CaseFormat
+    implementation 'com.google.guava:guava:r05'
+
+    // restAssured
+    testImplementation 'io.rest-assured:rest-assured:3.3.0'
+
+    // test
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    annotationProcessor 'org.projectlombok:lombok'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "io.awspring.cloud:spring-cloud-aws-dependencies:2.3.3"
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
