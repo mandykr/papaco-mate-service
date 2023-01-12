@@ -20,4 +20,10 @@ public class MateRestController {
         MateResponse mate = mateUseCase.proposeMate(projectId, reviewerId);
         return ResponseEntity.created(URI.create("/mates/" + mate.getId())).body(mate);
     }
+
+    @PutMapping("/{projectId}/{reviewerId}/join")
+    public ResponseEntity<MateResponse> joinMate(@PathVariable UUID projectId, @PathVariable Long reviewerId) {
+        mateUseCase.joinMate(projectId, reviewerId);
+        return ResponseEntity.ok().build();
+    }
 }

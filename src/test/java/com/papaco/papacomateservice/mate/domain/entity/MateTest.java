@@ -33,7 +33,7 @@ class MateTest {
 
     @DisplayName("리뷰어 등록이 되어있지 않으면 메이트를 제안할 수 없다")
     @Test
-    void unregistered() {
+    void unregistered_propose() {
         Reviewer unregistered = new Reviewer(1L, false);
         Mate mate = Mate.mateInWaiting(mateId, projectId, unregistered);
 
@@ -50,6 +50,16 @@ class MateTest {
         mate.join();
 
         assertThat(mate.getStatus()).isEqualTo(MateStatus.JOINED);
+    }
+
+    @DisplayName("리뷰어 등록이 되어있지 않으면 메이트를 연결할 수 없다")
+    @Test
+    void unregistered_join() {
+        Reviewer unregistered = new Reviewer(1L, false);
+        Mate mate = Mate.mateInWaiting(mateId, projectId, unregistered);
+
+        assertThatThrownBy(mate::join)
+                .isInstanceOf(IllegalStateException.class);
     }
 
     @DisplayName("메이트를 연결에서 종료로 변경한다")

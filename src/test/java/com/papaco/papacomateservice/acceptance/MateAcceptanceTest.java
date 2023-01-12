@@ -1,29 +1,28 @@
 package com.papaco.papacomateservice.acceptance;
 
 import com.papaco.papacomateservice.mate.application.port.output.ReviewerRepository;
+import com.papaco.papacomateservice.mate.domain.entity.Reviewer;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.UUID;
 
 import static com.papaco.papacomateservice.acceptance.MateSteps.*;
 
 class MateAcceptanceTest extends AcceptanceTest {
+    @Autowired
+    private ReviewerRepository reviewerRepository;
     private UUID 프로젝트 = UUID.fromString("6fec2b25-9ad4-4dba-9f54-bc3c3305a6a5");
     private Long 리뷰어 = 1L;
 
-    @TestConfiguration
-    public static class Config {
-        @Primary
-        @Bean
-        public ReviewerRepository InmemoryReviewerRepository() {
-            return new InmemoryReviewerRepository();
-        }
+    @BeforeEach
+    public void setUp() {
+        super.setUp();
+        reviewerRepository.save(new Reviewer(리뷰어, true));
     }
 
     /**
@@ -42,6 +41,9 @@ class MateAcceptanceTest extends AcceptanceTest {
     void matching() {
         ExtractableResponse<Response> proposeResponse = 메이트_제안_요청(프로젝트, 리뷰어);
         메이트_제안_요청됨(proposeResponse);
+
+        ExtractableResponse<Response> joinResponse = 메이트_제안_수락_요청(프로젝트, 리뷰어);
+        메이트_연결됨(joinResponse);
     }
 
     /**

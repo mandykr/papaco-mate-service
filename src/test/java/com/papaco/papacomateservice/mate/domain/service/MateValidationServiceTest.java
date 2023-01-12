@@ -1,6 +1,5 @@
 package com.papaco.papacomateservice.mate.domain.service;
 
-import com.papaco.papacomateservice.mate.application.port.output.MateRepository;
 import com.papaco.papacomateservice.mate.domain.entity.Mate;
 import com.papaco.papacomateservice.mate.domain.entity.Reviewer;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,26 +18,22 @@ class MateValidationServiceTest {
     private UUID projectId = UUID.fromString("6fec2b25-9ad4-4dba-9f54-bc3c3305a6a5");
     private Reviewer reviewer = new Reviewer(1L, true);
     private MateValidationService validationService;
-    private MateRepository mateRepository;
 
     @BeforeEach
     void setUp() {
         validationService = new MateValidationService();
     }
 
-    @DisplayName("프로젝트의 메이트가 연결 상태이면 새로운 메이트를 제안할 수 없다")
+    @DisplayName("프로젝트에 연결된 메이트가 존재하면 예외가 발생한다")
     @Test
-    void joined() {
+    void propose_joined() {
         Mate mate = Mate.mateInWaiting(UUID.randomUUID(), projectId, reviewer);
         ReflectionTestUtils.setField(mate, "status", JOINED);
-
-        Reviewer newReviewer = new Reviewer(2L, true);
-        Mate newMate = Mate.mateInWaiting(UUID.randomUUID(), projectId, newReviewer);
 
         List<Mate> mates = new ArrayList<>();
         mates.add(mate);
 
-        assertThatThrownBy(() -> validationService.validatePropose(projectId, mates, newMate, newReviewer))
+        assertThatThrownBy(() -> validationService.validateJoined(mates))
                 .isInstanceOf(IllegalStateException.class);
     }
 }

@@ -31,13 +31,18 @@ public class Mate {
     }
 
     public void propose() {
-        if (!reviewer.isRegistered()) {
-            throw new IllegalStateException("리뷰어 등록이 되어있지 않으면 메이트를 제안할 수 없습니다");
-        }
+        checkRegisteredReviewer();
         this.status = MateStatus.PROPOSED;
     }
 
+    private void checkRegisteredReviewer() {
+        if (!reviewer.isRegistered()) {
+            throw new IllegalStateException("리뷰어 등록이 되어있지 않으면 메이트를 제안할 수 없습니다");
+        }
+    }
+
     public void join() {
+        checkRegisteredReviewer();
         this.status = MateStatus.JOINED;
     }
 
