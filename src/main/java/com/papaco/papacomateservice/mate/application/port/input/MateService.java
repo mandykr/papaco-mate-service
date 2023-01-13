@@ -7,6 +7,7 @@ import com.papaco.papacomateservice.mate.application.port.usecase.MateUseCase;
 import com.papaco.papacomateservice.mate.domain.entity.Mate;
 import com.papaco.papacomateservice.mate.domain.entity.Reviewer;
 import com.papaco.papacomateservice.mate.domain.service.MateValidationService;
+import com.papaco.papacomateservice.mate.domain.vo.MateStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,11 +30,16 @@ public class MateService implements MateUseCase {
     public MateResponse proposeMate(UUID projectId, Long reviewerId) {
         validateJoinedProject(projectId);
         Reviewer reviewer = findReviewerById(reviewerId);
-        Mate mate = Mate.mateInWaiting(UUID.randomUUID(), projectId, reviewer);
+        Mate mate = findOrCreateMateInWaiting(projectId, reviewer);
 
         mate.propose();
         Mate saveMate = mateRepository.save(mate);
         return MateResponse.of(saveMate);
+    }
+
+    private Mate findOrCreateMateInWaiting(UUID projectId, Reviewer reviewer) {
+        return mateRepository.findByProjectIdAndReviewerAndStatus(projectId, reviewer, MateStatus.WAITING)
+                .orElse(Mate.mateInWaiting(UUID.randomUUID(), projectId, reviewer));
     }
 
     private Reviewer findReviewerById(Long reviewerId) {

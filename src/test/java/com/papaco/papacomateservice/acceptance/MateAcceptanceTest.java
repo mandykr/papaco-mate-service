@@ -55,13 +55,12 @@ class MateAcceptanceTest extends AcceptanceTest {
      *   Scenario: 메이트 제안을 취소한다.
      *     When 메이트 제안 요청
      *     Then 메이트 제안 요청됨
-     *     When 메이트 제안 취소
-     *     Then 메이트 제안 취소됨
+     *     When 메이트 제안 삭제 요청
+     *     Then 메이트 제안 삭제됨
      */
-    @DisplayName("메이트 제안을 취소한다")
+    @DisplayName("메이트 제안을 삭제한다")
     @Test
     void cancel() {
-
     }
 
     /**
