@@ -22,14 +22,20 @@ public class MateRestController {
     }
 
     @PutMapping("/{mateId}/join")
-    public ResponseEntity<MateResponse> joinMate(@PathVariable UUID mateId) {
+    public ResponseEntity<Void> joinMate(@PathVariable UUID mateId) {
         mateUseCase.joinMate(mateId);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{mateId}/finish")
-    public ResponseEntity<MateResponse> finishMate(@PathVariable UUID mateId) {
+    public ResponseEntity<Void> finishMate(@PathVariable UUID mateId) {
         mateUseCase.finishMate(mateId);
         return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{mateId}")
+    public ResponseEntity<Void> deleteMate(@PathVariable UUID mateId) {
+        mateUseCase.deleteMate(mateId);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -10,4 +10,6 @@ public interface MateUseCase {
     void joinMate(UUID mateId);
 
     void finishMate(UUID mateId);
+
+    void deleteMate(UUID mateId);
 }

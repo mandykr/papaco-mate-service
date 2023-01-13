@@ -50,6 +50,19 @@ public class MateSteps {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 
+    public static ExtractableResponse<Response> 메이트_제안_삭제_요청(ExtractableResponse<Response> response) {
+        String uri = response.header("Location");
+
+        return RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().delete(uri)
+                .then().log().all().extract();
+    }
+
+    public static void 메이트_제안_삭제됨(ExtractableResponse<Response> response) {
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
+    }
+
     private static String getURI(UUID projectId, Long reviewerId, String control) {
         return String.format("%s/%s/%d/%s", ENDPOINT, projectId, reviewerId, control);
     }

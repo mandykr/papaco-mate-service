@@ -60,7 +60,12 @@ class MateAcceptanceTest extends AcceptanceTest {
      */
     @DisplayName("메이트 제안을 삭제한다")
     @Test
-    void cancel() {
+    void remove() {
+        ExtractableResponse<Response> proposeResponse = 메이트_제안_요청(프로젝트, 리뷰어);
+        메이트_제안_요청됨(proposeResponse);
+
+        ExtractableResponse<Response> removeResponse = 메이트_제안_삭제_요청(proposeResponse);
+        메이트_제안_삭제됨(removeResponse);
     }
 
     /**
@@ -69,7 +74,7 @@ class MateAcceptanceTest extends AcceptanceTest {
      *   Scenario: 메이트 제안을 거절한다.
      *     When 메이트 제안 요청
      *     Then 메이트 제안 요청됨
-     *     When 메이트 제안 거절
+     *     When 메이트 제안 거절 요청
      *     Then 메이트 제안 거절됨
      */
     @DisplayName("메이트 제안을 거절한다")

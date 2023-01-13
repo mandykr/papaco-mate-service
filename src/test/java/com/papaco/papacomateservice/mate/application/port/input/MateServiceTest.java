@@ -9,6 +9,8 @@ import com.papaco.papacomateservice.mate.domain.vo.MateStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -17,6 +19,8 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.params.provider.EnumSource.Mode.INCLUDE;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -48,5 +52,29 @@ class MateServiceTest {
         mateService.finishMate(MATE_ID);
 
         assertThat(saveMate.getStatus()).isEqualTo(MateStatus.FINISHED);
+    }
+
+    @DisplayName("제안 상태의 메이트를 삭제한다")
+    @Test
+    void deleteMate() {
+        Mate mate = Mate.mateInWaiting(MATE_ID, PROJECT_ID, reviewer);
+        ReflectionTestUtils.setField(mate, "status", MateStatus.PROPOSED);
+        mateRepository.save(mate);
+
+        mateService.deleteMate(MATE_ID);
+
+        assertThat(mateRepository.findById(MATE_ID)).isEmpty();
+    }
+
+    @DisplayName("연결, 종료 상태의 메이트는 삭제할 수 없다")
+    @ParameterizedTest
+    @EnumSource(mode = INCLUDE, names = {"JOINED", "FINISHED"})
+    void deleteFailed(MateStatus status) {
+        Mate mate = Mate.mateInWaiting(MATE_ID, PROJECT_ID, reviewer);
+        ReflectionTestUtils.setField(mate, "status", status);
+        mateRepository.save(mate);
+
+        assertThatThrownBy(() -> mateService.deleteMate(MATE_ID))
+                .isInstanceOf(IllegalStateException.class);
     }
 }

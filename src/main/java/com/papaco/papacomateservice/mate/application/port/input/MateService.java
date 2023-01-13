@@ -60,6 +60,13 @@ public class MateService implements MateUseCase {
         mate.finish();
     }
 
+    @Override
+    public void deleteMate(UUID mateId) {
+        Mate mate = findMateById(mateId);
+        validationService.validateDelete(mate);
+        mateRepository.delete(mate);
+    }
+
     private void validateJoinedProject(UUID projectId) {
         List<Mate> joinedList = mateRepository.findAllByProjectIdAndStatus(projectId, JOINED);
         validationService.validateJoined(joinedList);
