@@ -44,6 +44,9 @@ class MateAcceptanceTest extends AcceptanceTest {
 
         ExtractableResponse<Response> joinResponse = 메이트_제안_수락_요청(proposeResponse);
         메이트_연결됨(joinResponse);
+
+        ExtractableResponse<Response> finishResponse = 메이트_종료_요청(proposeResponse);
+        메이트_종료됨(finishResponse);
     }
 
     /**

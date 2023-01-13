@@ -26,4 +26,10 @@ public class MateRestController {
         mateUseCase.joinMate(mateId);
         return ResponseEntity.ok().build();
     }
+
+    @PutMapping("/{mateId}/finish")
+    public ResponseEntity<MateResponse> finishMate(@PathVariable UUID mateId) {
+        mateUseCase.finishMate(mateId);
+        return ResponseEntity.ok().build();
+    }
 }

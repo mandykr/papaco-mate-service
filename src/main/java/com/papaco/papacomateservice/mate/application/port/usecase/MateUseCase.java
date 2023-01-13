@@ -8,4 +8,6 @@ public interface MateUseCase {
     MateResponse proposeMate(UUID projectId, Long reviewerId);
 
     void joinMate(UUID mateId);
+
+    void finishMate(UUID mateId);
 }
