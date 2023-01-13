@@ -7,5 +7,5 @@ import java.util.UUID;
 public interface MateUseCase {
     MateResponse proposeMate(UUID projectId, Long reviewerId);
 
-    void joinMate(UUID projectId, Long reviewerId);
+    void joinMate(UUID mateId);
 }

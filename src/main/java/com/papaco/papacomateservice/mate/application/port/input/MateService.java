@@ -36,18 +36,17 @@ public class MateService implements MateUseCase {
         return MateResponse.of(saveMate);
     }
 
-    @Override
-    public void joinMate(UUID projectId, Long reviewerId) {
-        Reviewer reviewer = findReviewer(reviewerId);
-        Mate mate = mateRepository.findByProjectIdAndReviewer(projectId, reviewer)
-                .orElseThrow(EntityNotFoundException::new);
-        validateJoinedProject(projectId);
-        mate.join();
-    }
-
     private Reviewer findReviewer(Long reviewerId) {
         return reviewerRepository.findById(reviewerId)
                 .orElseThrow(EntityNotFoundException::new);
+    }
+
+    @Override
+    public void joinMate(UUID mateId) {
+        Mate mate = mateRepository.findById(mateId)
+                .orElseThrow(EntityNotFoundException::new);
+        validateJoinedProject(mate.getProjectId());
+        mate.join();
     }
 
     private void validateJoinedProject(UUID projectId) {

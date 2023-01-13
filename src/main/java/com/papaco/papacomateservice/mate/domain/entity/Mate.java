@@ -19,7 +19,7 @@ public class Mate {
     private UUID id;
     private UUID projectId;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reviewer_id")
     private Reviewer reviewer;
 

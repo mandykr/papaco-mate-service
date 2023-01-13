@@ -24,10 +24,12 @@ public class MateSteps {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
     }
 
-    public static ExtractableResponse<Response> 메이트_제안_수락_요청(UUID projectId, Long reviewerId) {
+    public static ExtractableResponse<Response> 메이트_제안_수락_요청(ExtractableResponse<Response> response) {
+        String uri = response.header("Location");
+
         return RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .when().put(getURI(projectId, reviewerId, "join"))
+                .when().put(getURI(uri, "join"))
                 .then().log().all().extract();
     }
 
@@ -37,5 +39,9 @@ public class MateSteps {
 
     private static String getURI(UUID projectId, Long reviewerId, String control) {
         return String.format("%s/%s/%d/%s", ENDPOINT, projectId, reviewerId, control);
+    }
+
+    private static String getURI(String uri, String control) {
+        return String.format("%s/%s", uri, control);
     }
 }

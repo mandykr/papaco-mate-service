@@ -33,8 +33,8 @@ class MateAcceptanceTest extends AcceptanceTest {
      *     Then 메이트 제안 요청됨
      *     When 메이트 제안 수락 요청
      *     Then 메이트 연결됨
-     *     When 메이트 연결 종료 요청
-     *     Then 메이트 연결 종료됨
+     *     When 메이트 종료 요청
+     *     Then 메이트 종료됨
      */
     @DisplayName("메이트 매칭을 진행한다")
     @Test
@@ -42,7 +42,7 @@ class MateAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> proposeResponse = 메이트_제안_요청(프로젝트, 리뷰어);
         메이트_제안_요청됨(proposeResponse);
 
-        ExtractableResponse<Response> joinResponse = 메이트_제안_수락_요청(프로젝트, 리뷰어);
+        ExtractableResponse<Response> joinResponse = 메이트_제안_수락_요청(proposeResponse);
         메이트_연결됨(joinResponse);
     }
 
