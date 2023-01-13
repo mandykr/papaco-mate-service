@@ -27,26 +27,26 @@ class MateServiceTest {
     @Autowired
     private MateRepository mateRepository;
     private MateService mateService;
-    private UUID MATE_ID = UUID.fromString("d8f64416-08f7-4705-8fdb-4d04e1153a0f");
-    private UUID PROJECT_ID = UUID.fromString("6fec2b25-9ad4-4dba-9f54-bc3c3305a6a5");
-    private Reviewer REVIEWER;
+    private static UUID MATE_ID = UUID.fromString("d8f64416-08f7-4705-8fdb-4d04e1153a0f");
+    private static UUID PROJECT_ID = UUID.fromString("6fec2b25-9ad4-4dba-9f54-bc3c3305a6a5");
+    private Reviewer reviewer;
 
     @BeforeEach
     void setUp() {
         mateService = new MateService(mateRepository, reviewerRepository, new MateValidationService());
-        REVIEWER = new Reviewer(1L, true);
-        reviewerRepository.save(REVIEWER);
+        reviewer = new Reviewer(1L, true);
+        reviewerRepository.save(reviewer);
     }
 
     @DisplayName("메이트를 종료한다")
     @Test
     void finishMate() {
-        Mate mate = Mate.mateInWaiting(MATE_ID, PROJECT_ID, REVIEWER);
+        Mate mate = Mate.mateInWaiting(MATE_ID, PROJECT_ID, reviewer);
         ReflectionTestUtils.setField(mate, "status", MateStatus.JOINED);
-        mateRepository.save(mate);
+        Mate saveMate = mateRepository.save(mate);
 
         mateService.finishMate(MATE_ID);
 
-        assertThat(mate.getStatus()).isEqualTo(MateStatus.FINISHED);
+        assertThat(saveMate.getStatus()).isEqualTo(MateStatus.FINISHED);
     }
 }
