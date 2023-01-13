@@ -33,6 +33,12 @@ public class MateRestController {
         return ResponseEntity.ok().build();
     }
 
+    @PutMapping("/{mateId}/reject")
+    public ResponseEntity<Void> rejectMate(@PathVariable UUID mateId) {
+        mateUseCase.rejectMate(mateId);
+        return ResponseEntity.ok().build();
+    }
+
     @DeleteMapping("/{mateId}")
     public ResponseEntity<Void> deleteMate(@PathVariable UUID mateId) {
         mateUseCase.deleteMate(mateId);

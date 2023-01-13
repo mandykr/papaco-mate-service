@@ -6,8 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.papaco.papacomateservice.mate.domain.vo.MateStatus.FINISHED;
-import static com.papaco.papacomateservice.mate.domain.vo.MateStatus.JOINED;
+import static com.papaco.papacomateservice.mate.domain.vo.MateStatus.*;
 
 @Transactional
 @Service
@@ -21,6 +20,10 @@ public class MateValidationService {
     public void validateDelete(Mate mate) {
         if (mate.getStatus() == JOINED) {
             throw new IllegalStateException("연결 상태의 메이트는 삭제할 수 없습니다.");
+        }
+
+        if (mate.getStatus() == REJECTED) {
+            throw new IllegalStateException("거절 상태의 메이트는 삭제할 수 없습니다.");
         }
 
         if (mate.getStatus() == FINISHED) {

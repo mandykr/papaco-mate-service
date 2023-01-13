@@ -61,6 +61,12 @@ public class MateService implements MateUseCase {
     }
 
     @Override
+    public void rejectMate(UUID mateId) {
+        Mate mate = findMateById(mateId);
+        mate.reject();
+    }
+
+    @Override
     public void deleteMate(UUID mateId) {
         Mate mate = findMateById(mateId);
         validationService.validateDelete(mate);

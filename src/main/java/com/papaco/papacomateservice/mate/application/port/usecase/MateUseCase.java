@@ -11,5 +11,7 @@ public interface MateUseCase {
 
     void finishMate(UUID mateId);
 
+    void rejectMate(UUID mateId);
+
     void deleteMate(UUID mateId);
 }

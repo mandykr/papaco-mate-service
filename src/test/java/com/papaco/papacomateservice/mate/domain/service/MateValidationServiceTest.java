@@ -41,9 +41,9 @@ class MateValidationServiceTest {
                 .isInstanceOf(IllegalStateException.class);
     }
 
-    @DisplayName("연결, 종료 상태의 메이트를 삭제하면 예외가 발생한다")
+    @DisplayName("연결, 거절, 종료 상태의 메이트를 삭제하면 예외가 발생한다")
     @ParameterizedTest
-    @EnumSource(mode = INCLUDE, names = {"JOINED", "FINISHED"})
+    @EnumSource(mode = INCLUDE, names = {"JOINED", "REJECTED", "FINISHED"})
     void delete_joined_finished(MateStatus status) {
         Mate mate = Mate.mateInWaiting(UUID.randomUUID(), projectId, reviewer);
         ReflectionTestUtils.setField(mate, "status", status);

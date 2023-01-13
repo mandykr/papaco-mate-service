@@ -18,6 +18,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.UUID;
 
+import static com.papaco.papacomateservice.mate.domain.vo.MateStatus.REJECTED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.params.provider.EnumSource.Mode.INCLUDE;
@@ -44,7 +45,7 @@ class MateServiceTest {
 
     @DisplayName("메이트를 종료한다")
     @Test
-    void finishMate() {
+    void finish() {
         Mate mate = Mate.mateInWaiting(MATE_ID, PROJECT_ID, reviewer);
         ReflectionTestUtils.setField(mate, "status", MateStatus.JOINED);
         Mate saveMate = mateRepository.save(mate);
@@ -56,7 +57,7 @@ class MateServiceTest {
 
     @DisplayName("제안 상태의 메이트를 삭제한다")
     @Test
-    void deleteMate() {
+    void delete() {
         Mate mate = Mate.mateInWaiting(MATE_ID, PROJECT_ID, reviewer);
         ReflectionTestUtils.setField(mate, "status", MateStatus.PROPOSED);
         mateRepository.save(mate);
@@ -66,9 +67,9 @@ class MateServiceTest {
         assertThat(mateRepository.findById(MATE_ID)).isEmpty();
     }
 
-    @DisplayName("연결, 종료 상태의 메이트는 삭제할 수 없다")
+    @DisplayName("연결, 거절, 종료 상태의 메이트는 삭제할 수 없다")
     @ParameterizedTest
-    @EnumSource(mode = INCLUDE, names = {"JOINED", "FINISHED"})
+    @EnumSource(mode = INCLUDE, names = {"JOINED", "REJECTED", "FINISHED"})
     void deleteFailed(MateStatus status) {
         Mate mate = Mate.mateInWaiting(MATE_ID, PROJECT_ID, reviewer);
         ReflectionTestUtils.setField(mate, "status", status);
@@ -76,5 +77,17 @@ class MateServiceTest {
 
         assertThatThrownBy(() -> mateService.deleteMate(MATE_ID))
                 .isInstanceOf(IllegalStateException.class);
+    }
+
+    @DisplayName("제안 상태의 메이트를 거절한다")
+    @Test
+    void reject() {
+        Mate mate = Mate.mateInWaiting(MATE_ID, PROJECT_ID, reviewer);
+        ReflectionTestUtils.setField(mate, "status", MateStatus.PROPOSED);
+        Mate saveMate = mateRepository.save(mate);
+
+        mateService.rejectMate(MATE_ID);
+
+        assertThat(saveMate.getStatus()).isEqualTo(REJECTED);
     }
 }

@@ -50,6 +50,25 @@ class MateAcceptanceTest extends AcceptanceTest {
     }
 
     /**
+     * Feature: 메이트 제안 거절
+     *
+     *   Scenario: 메이트 제안을 거절한다.
+     *     When 메이트 제안 요청
+     *     Then 메이트 제안 요청됨
+     *     When 메이트 제안 거절 요청
+     *     Then 메이트 제안 거절됨
+     */
+    @DisplayName("메이트 제안을 거절한다")
+    @Test
+    void reject() {
+        ExtractableResponse<Response> proposeResponse = 메이트_제안_요청(프로젝트, 리뷰어);
+        메이트_제안_요청됨(proposeResponse);
+
+        ExtractableResponse<Response> removeResponse = 메이트_제안_거절_요청(proposeResponse);
+        메이트_제안_거절됨(removeResponse);
+    }
+
+    /**
      * Feature: 메이트 제안 취소
      *
      *   Scenario: 메이트 제안을 취소한다.
@@ -66,20 +85,5 @@ class MateAcceptanceTest extends AcceptanceTest {
 
         ExtractableResponse<Response> removeResponse = 메이트_제안_삭제_요청(proposeResponse);
         메이트_제안_삭제됨(removeResponse);
-    }
-
-    /**
-     * Feature: 메이트 제안 거절
-     *
-     *   Scenario: 메이트 제안을 거절한다.
-     *     When 메이트 제안 요청
-     *     Then 메이트 제안 요청됨
-     *     When 메이트 제안 거절 요청
-     *     Then 메이트 제안 거절됨
-     */
-    @DisplayName("메이트 제안을 거절한다")
-    @Test
-    void reject() {
-
     }
 }
