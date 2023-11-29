@@ -8,4 +8,6 @@ public interface ReviewerRepository {
     Reviewer save(Reviewer reviewer);
 
     Optional<Reviewer> findById(Long reviewerId);
+
+    void flush();
 }

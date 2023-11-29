@@ -1,0 +1,32 @@
+{
+  "type": "record",
+  "name": "MateMessage",
+  "namespace": "com.papaco.avro.schema",
+  "fields": [
+    {
+      "name": "id",
+      "type": "string"
+    },
+    {
+      "name": "projectId",
+      "type": "string"
+    },
+    {
+      "name": "reviewer",
+      "type": {
+        "name": "ReviewerMessage",
+        "type": "record",
+        "fields" : [
+          {"name": "id", "type": "long"},
+          {"name": "registered", "type": "boolean"}
+        ]
+      }
+    },
+    {
+      "name": "status",
+      "type": "string"
+    },
+    {"name": "createdDate", "type": {"type": "long", "logicalType": "local-timestamp-millis"}},
+    {"name": "modifiedDate", "type": {"type": "long", "logicalType": "local-timestamp-millis"}}
+  ]
+}

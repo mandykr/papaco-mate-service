@@ -38,7 +38,7 @@ class MateServiceTest {
 
     @BeforeEach
     void setUp() {
-        mateService = new MateService(mateRepository, reviewerRepository, new MateValidationService());
+        mateService = new MateService(mateRepository, reviewerRepository, new MateValidationService(), new FakeMateEventPublisher());
         reviewer = new Reviewer(1L, true);
         reviewerRepository.save(reviewer);
     }
