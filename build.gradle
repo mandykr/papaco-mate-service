@@ -2,6 +2,8 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '2.7.7'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    id "com.github.davidmc24.gradle.plugin.avro" version "1.2.0"
+    id "idea"
 }
 
 group = 'com.papaco'
@@ -15,7 +17,12 @@ configurations {
 }
 
 repositories {
+    gradlePluginPortal()
     mavenCentral()
+
+    maven {
+        url "https://packages.confluent.io/maven"
+    }
 }
 
 ext {
@@ -31,9 +38,10 @@ dependencies {
     // spring cloud
 //    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 
-    // aws
-//    implementation 'io.awspring.cloud:spring-cloud-aws-context'
-//    implementation 'io.awspring.cloud:spring-cloud-starter-aws-messaging'
+    // kafka
+    implementation 'org.springframework.kafka:spring-kafka'
+    implementation 'org.apache.avro:avro:1.11.0'
+    implementation "io.confluent:kafka-avro-serializer:6.1.0"
 
     // CaseFormat
     implementation 'com.google.guava:guava:r05'
@@ -43,6 +51,7 @@ dependencies {
 
     // test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.kafka:spring-kafka-test'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'com.mysql:mysql-connector-j'
